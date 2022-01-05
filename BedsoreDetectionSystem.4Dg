@@ -1,0 +1,862 @@
+#platform "uLCD-24PTU"
+
+// Program Skeleton 1.2 generated 12/11/2015 3:17:31 PM
+
+#inherit "4DGL_16bitColours.fnc"
+
+#inherit "VisualConst.inc"
+#inherit "PrintDisk.inc"
+
+#inherit "BedsoreDetectionSystemConst.inc"
+
+// Define some user preferences to make things look more 'C' like
+#constant enum      $#constant      /* define the enum word*/
+#constant define    $#constant      /* define the #define word*/
+#constant ifdef     $#IF EXISTS     /* define the #ifdef word */
+#constant ifndef    $#IFNOT EXISTS  /* define the #ifndef word */
+#constant include   $#inherit       /* define the #word */
+
+define TRUE 1
+define FALSE 0
+
+#constant SCREENS_SPLASH_SCREEN         0x00
+#constant SCREENS_USER_BARCODE          0x01
+#constant SCREENS_PATIENT_BARCODE       0x02
+#constant SCREENS_PRESSURE_1            0x03
+#constant SCREENS_PRESSURE_2            0x04
+#constant SCREENS_SELECT_SITE           0x05
+#constant SCREENS_HEALTHY_SITE          0x06
+#constant SCREENS_SUSPECTED_SITE        0x07
+#constant SCREENS_THANK_YOU             0x08
+#constant SCREENS_PRESSURE_TIMEOUT      0x09
+#constant SCREENS_PRESSURE_TIMEOUT2     0x0A
+#constant SCREENS_CONFIRM_SITE          0xFF
+
+#constant SERIAL_BUFFER_SIZE            100
+#constant SERIAL_COMMAND_DELIMITER      '\r'
+
+// Serial buffer
+var serial_buffer[SERIAL_BUFFER_SIZE];
+var serial_buffer_index := 0;
+
+// Current screen index
+var current_screen_id := 0;
+
+// Site selection
+var selected_site := -1;
+
+//
+//
+// Serial buffer functions
+//
+//
+func SerialBuffer_ResetBuffer()
+    // Clear out the buffer (fill with zeros)
+    var index;
+
+    for(index := 0; index < (SERIAL_BUFFER_SIZE - 1); index++)
+        // Set this index in the buffer to zero
+        serial_buffer[index] := 0;
+    next
+
+    // Also reset our current buffer index
+    serial_buffer_index := 0;
+endfunc
+
+func SerialBuffer_AddCharacter(var char_to_add)
+    // Make sure we have space in the buffer
+    if(serial_buffer_index >= (SERIAL_BUFFER_SIZE - 1))
+        // No space in buffer. Reset buffer first
+        SerialBuffer_ResetBuffer();
+    endif
+
+    // Now add the character to the appropirate index
+    serial_buffer[serial_buffer_index] := char_to_add;
+
+    // Increment our index
+    serial_buffer_index++;
+endfunc
+
+// Enumerate return
+enum SERIAL_NO_DATA, SERIAL_DATA_NO_DELIMITER, SERIAL_DATA_DELIMITER
+
+func SerialBuffer_CheckForData()
+    // Checks for any incoming data over the serial line
+    // If the serial line is
+    var char;
+    char := serin();
+    if(char >= 0)
+        // Process character
+        // Check if character is our delimiter
+        if(char == SERIAL_COMMAND_DELIMITER)
+            // Got a delimiter. Do not add it to the buffer but return the appropriate code
+            return SERIAL_DATA_DELIMITER;
+        else
+            // Not a delimiter. Add it to our buffer
+            SerialBuffer_AddCharacter(char);
+
+            // Return the appropriate code
+            return SERIAL_DATA_NO_DELIMITER;
+        endif
+    endif
+
+    // No data received. Return appropriate code
+    return SERIAL_NO_DATA;
+endfunc
+
+func SerialBuffer_ProcessCommand()
+    // Need to check what's in our serial buffer with our list of commands
+
+    // Debug code to print it on the screen
+    /*
+    gfx_Cls();
+    txt_MoveCursor(20,0);
+    var i;
+    for(i := 0; i < serial_buffer_index; i++)
+        print([CHR]serial_buffer[i]);
+    next
+    */
+
+    // Check to see if the buffer matches any of the predefined commands
+    switch(serial_buffer[0])
+        case 's':
+            // Switch screen command
+            Commands_SwitchScreenCommand();
+            break;
+        case 'p':
+            // Pressure data command
+            Commands_UpdatePressureData();
+            break;
+    endswitch
+endfunc
+
+func Commands_SwitchScreenCommand()
+    // Command is "s0002" where "0002" is the screen index.
+    // Convert it and switch to the proper index
+    var screen_index;
+    screen_index := Utilities_ConvertHexStringToInt(&serial_buffer[1]);
+
+    // Now switch to the appropriate screen
+    Screens_SwitchScreen(screen_index);
+endfunc
+
+var previous_pressure_state := 0;
+var previous_balance := 0;
+
+func Commands_UpdatePressureData()
+    // Command is "p000100021
+    var pressure_value := 0;
+    pressure_value := Utilities_ConvertHexStringToInt(&serial_buffer[1]);
+
+    //pressure_value := (pressure_value * 60) / 1024;
+    if(pressure_value > 800)
+        pressure_value := 800;
+    endif
+
+    if(pressure_value < 0)
+        pressure_value := 0;
+    endif
+
+    // Default to "in range" pressure state
+    var current_pressure_state := 0;
+
+    if(pressure_value < 585)
+        // Below threshold
+        current_pressure_state := -1;
+    endif
+
+    if(pressure_value > 715)
+        // Above threshold
+        current_pressure_state := 1;
+    endif
+
+    // Set the value to the angular meters
+    img_SetWord(hndl, iAngularmeter1, IMAGE_INDEX, pressure_value) ; // where frame is 0 to 60 (for a displayed 0 to 6)
+    img_Show(hndl,iAngularmeter1) ;
+
+    // Check to see if we have an updated pressure state
+    if(previous_pressure_state != current_pressure_state)
+        gfx_RectangleFilled(0,216,240,271,WHITE);
+    endif
+
+    previous_pressure_state := current_pressure_state;
+
+    // Depending on state we can set the appropriate text items
+    if(current_pressure_state == -1)
+        // Below target pressure
+
+        // Strings24 1.1 generated 4/13/2016 4:42:59 AM
+        txt_FontID(hFont10) ; // Font index correct at time of code generation
+        txt_FGcolour(BLACK) ;
+        txt_BGcolour(WHITE) ;
+        gfx_MoveTo(0 , 216) ;
+        PrintDisk(hstrings, Strings24StartH, Strings24StartL, Strings24Size, 0) ; // where i is Page 0 - Strings24Count-1
+    endif
+
+    if(current_pressure_state == 1)
+        // Above target pressure
+
+        // Strings21 1.1 generated 4/13/2016 4:45:03 AM
+        txt_FontID(hFont7) ; // Font index correct at time of code generation
+        txt_FGcolour(BLACK) ;
+        txt_BGcolour(WHITE) ;
+        gfx_MoveTo(0 , 216) ;
+        PrintDisk(hstrings, Strings21StartH, Strings21StartL, Strings21Size, 0) ; // where i is Page 0 - Strings21Count-1
+
+    endif
+    // Print the remaining time too
+
+    if(current_pressure_state == 0)
+        // Strings22 1.1 generated 4/13/2016 4:44:17 AM
+        txt_FontID(hFont8) ; // Font index correct at time of code generation
+        txt_FGcolour(BLACK) ;
+        txt_BGcolour(WHITE) ;
+        gfx_MoveTo(0 , 216) ;
+        PrintDisk(hstrings, Strings22StartH, Strings22StartL, Strings22Size, 0) ; // where i is Page 0 - Strings22Count-1
+
+
+        var time_remaining := 0;
+        time_remaining := Utilities_ConvertHexStringToInt(&serial_buffer[5]);
+
+        txt_Set(TEXT_COLOUR, BLACK);
+        txt_Set(TEXT_HIGHLIGHT, WHITE);
+        txt_Set(FONT_ID, FONT1);
+        txt_MoveCursor(31,0);
+
+        if(time_remaining > 0)
+            var seconds_remaining;
+            var milliseconds_remaining;
+            seconds_remaining := time_remaining/1000;
+            milliseconds_remaining := time_remaining - (seconds_remaining*1000);
+
+            print("          ");
+            print("Hold for ");
+            print(seconds_remaining);
+            print(".");
+            print([UDEC3Z]milliseconds_remaining);
+            print("             ");
+        else
+            print("  Adjust pressure to green range  ");
+        endif
+    endif
+
+    // Now display if we're balanced or not
+    if(pressure_value > 0)
+        // We are pressing on the skin
+        var pressure_balanced := 0;
+        if(serial_buffer[9] == '1')
+            pressure_balanced := 1;
+        endif
+
+        if(pressure_balanced != previous_balance)
+            // Clear the balance area so we can display the proper text
+            gfx_RectangleFilled(0,286,240,320,WHITE);
+        endif
+        previous_balance := pressure_balanced;
+
+        if(serial_buffer[9] == '1')
+            // Pressure is balanced among sensors
+            //print("             BALANCED              ");
+
+            // Strings18 1.1 generated 4/13/2016 1:13:52 AM
+            txt_FontID(hFont4) ; // Font index correct at time of code generation
+            txt_FGcolour(BLACK) ;
+            txt_BGcolour(WHITE) ;
+            gfx_MoveTo(0 , 286) ;
+            PrintDisk(hstrings, Strings18StartH, Strings18StartL, Strings18Size, 0) ; // where i is Page 0 - Strings18Count-1
+
+        else
+            // Pressure is not balanced
+            //txt_MoveCursor(35,0);
+            //print("Press device perpendicular to skin ");
+
+            // Strings19 1.1 generated 4/13/2016 1:14:09 AM
+            txt_FontID(hFont5) ; // Font index correct at time of code generation
+            txt_FGcolour(RED) ;
+            txt_BGcolour(WHITE) ;
+            gfx_MoveTo(0 , 286) ;
+            PrintDisk(hstrings, Strings19StartH, Strings19StartL, Strings19Size, 0) ; // where i is Page 0 - Strings19Count-1
+
+
+        endif
+    else
+        // No or very low pressure. Do not print balance information (how can it be balanced if there's no pressure?)
+        // Clear out any information that's already there
+        //print("                                   ");
+    endif
+endfunc
+
+var hstrings ; // Handle to access uSD strings, uncomment if required
+var hFont1 ;   // Handle to access uSD fonts, uncomment if required and change n to font number
+var hFont2 ;
+var hFont3 ;
+var hFont4 ;
+var hFont5 ;
+var hFont6 ;
+var hFont7 ;
+var hFont8 ;
+var hFont9 ;
+var hFont10 ;
+var hFont11 ;
+var hFont12;
+var hFont13 ;
+var hFont14 ;
+var hFont15 ;
+var hFont16 ;
+
+var comBuf[48];
+
+func main()
+
+//  Uncomment the following if uSD images, fonts or strings used.
+
+    //putstr("Mounting...\n");
+    if (!(file_Mount()))
+        while(!(file_Mount()))
+            putstr("Drive not mounted...");
+            pause(200);
+            gfx_Cls();
+            pause(200);
+        wend
+    endif
+//    gfx_TransparentColour(0x0020);    // uncomment if transparency required
+//    gfx_Transparency(ON);             // uncomment if transparency required
+
+
+
+    touch_Set(TOUCH_ENABLE);                            // enable the touch screen
+    hndl := file_LoadImageControl("BEDSOR~1.dat", "BEDSOR~1.gci", 1);
+    hFont1 := file_LoadImageControl("BEDSOR~1.da1", "BEDSOR~1.gc1", 1); // Open handle to access uSD fonts, uncomment if required and change n to font number dropping a and c if > 9
+    hFont2 := file_LoadImageControl("BEDSOR~1.da2", "BEDSOR~1.gc2", 1);
+    hFont3 := file_LoadImageControl("BEDSOR~1.da3", "BEDSOR~1.gc3", 1);
+    hFont4 := file_LoadImageControl("BEDSOR~1.da4", "BEDSOR~1.gc4", 1);
+    hFont5 := file_LoadImageControl("BEDSOR~1.da5", "BEDSOR~1.gc5", 1);
+    hFont6 := file_LoadImageControl("BEDSOR~1.da6", "BEDSOR~1.gc6", 1);
+    hFont7 := file_LoadImageControl("BEDSOR~1.da7", "BEDSOR~1.gc7", 1);
+    hFont8 := file_LoadImageControl("BEDSOR~1.da8", "BEDSOR~1.gc8", 1);
+    hFont9 := file_LoadImageControl("BEDSOR~1.da9", "BEDSOR~1.gc9", 1);
+    hFont10 := file_LoadImageControl("BEDSOR~1.d10", "BEDSOR~1.g10", 1);
+    //hFont11 := file_LoadImageControl("BEDSOR~1.d11", "BEDSOR~1.g11", 1);
+    //hFont12 := file_LoadImageControl("BEDSOR~1.d12", "BEDSOR~1.g12", 1);
+    //hFont13 := file_LoadImageControl("BEDSOR~1.d13", "BEDSOR~1.g13", 1);
+    //hFont14 := file_LoadImageControl("BEDSOR~1.d14", "BEDSOR~1.g14", 1);
+    //hFont15 := file_LoadImageControl("BEDSOR~1.d15", "BEDSOR~1.g15", 1);
+    hFont16 := file_LoadImageControl("BEDSOR~1.d16", "BEDSOR~1.g16", 1);
+    hstrings := file_Open("BEDSOR~1.txf", 'r') ; // Open handle to access uSD strings, uncomment if required
+
+    com_Init(comBuf, 96, 0);
+
+    // Set the baud rate appropriately
+    setbaud(BAUD_115200);
+    /*
+    print("Starting!");
+    pause(1000);
+      */
+    Screens_SwitchScreen(SCREENS_SPLASH_SCREEN);
+
+    // Initialize serial buffer
+    SerialBuffer_ResetBuffer();
+
+    // Main loop
+    repeat
+        // Check for incoming serial data
+        var serial_data_status;
+        serial_data_status := SerialBuffer_CheckForData();
+
+        // If we've received a delimiter, process the serial buffer
+        if(serial_data_status == SERIAL_DATA_DELIMITER)
+            // Process data
+            SerialBuffer_ProcessCommand();
+
+            // Reset the command buffer
+            SerialBuffer_ResetBuffer();
+        endif
+
+        if (com_Full() || com_Error() )       // if any errors
+            com_Init(comBuf, 96, 0);          // reset comms buffer
+        endif
+
+        var state;
+        var n;
+        var x, y;
+        var button_pressed;
+        if(current_screen_id == SCREENS_SELECT_SITE)
+            state := touch_Get(TOUCH_STATUS);               // get touchscreen status
+            x := touch_Get(TOUCH_GETX);
+            y := touch_Get(TOUCH_GETY);
+
+            if(state == TOUCH_PRESSED)
+                button_pressed := 1;
+
+                if(y > 280)
+                  selected_site := 6;
+                else if(y > 240)
+                  selected_site := 5;
+                else if(y > 200)
+                  selected_site := 4;
+                else if(y > 160)
+                  selected_site := 3;
+                else if(y > 120)
+                  selected_site := 2;
+                else if(y > 80)
+                  selected_site := 1;
+                else
+                  button_pressed := 0;
+                endif
+
+                if(button_pressed == 1)
+                    Screens_SwitchScreen(SCREENS_CONFIRM_SITE);
+                endif
+            endif
+        else if(current_screen_id == SCREENS_CONFIRM_SITE)
+
+            state := touch_Get(TOUCH_STATUS);               // get touchscreen status
+            x := touch_Get(TOUCH_GETX);
+            y := touch_Get(TOUCH_GETY);
+
+            if(state == TOUCH_PRESSED)
+                button_pressed := 1;
+                if(y > 210)
+                    if(x < 120)
+                        button_pressed := 1;
+                    else
+                        button_pressed := 2;
+                    endif
+                else
+                    button_pressed := 0;
+                endif
+
+
+                if(button_pressed == 1)
+                    Screens_SwitchScreen(SCREENS_SELECT_SITE);
+                else if(button_pressed == 2)
+                    to(COM0); putch(selected_site);           // spit buffered chars to com port
+                endif
+            endif
+        endif
+
+    forever
+
+endfunc
+
+
+//
+//
+// Screens and screen related functions
+//
+//
+func Screens_SwitchScreen(var screen_index)
+       // Displays a specific screen depending on the index
+       switch(screen_index)
+            case SCREENS_SPLASH_SCREEN:
+                Screens_SplashScreen();
+                break;
+            case SCREENS_USER_BARCODE:
+                Screens_UserBarcodeScreen();
+                break;
+            case SCREENS_PATIENT_BARCODE:
+                Screens_PatientBarcodeScreen();
+                break;
+            case SCREENS_PRESSURE_1:
+                Screens_PressureScreen(1);
+                break;
+            case SCREENS_PRESSURE_2:
+                Screens_PressureScreen(2);
+                break;
+            case SCREENS_SELECT_SITE:
+                Screens_SelectSiteScreen();
+                break;
+            case SCREENS_HEALTHY_SITE:
+                Screens_HealthySiteScreen();
+                break;
+            case SCREENS_SUSPECTED_SITE:
+                Screens_SuspectedSiteScreen();
+                break;
+            case SCREENS_THANK_YOU:
+                Screens_ThankYouScreen();
+                break;
+            case SCREENS_PRESSURE_TIMEOUT:
+                Screens_PressureTimeoutScreen();
+                break;
+            case SCREENS_PRESSURE_TIMEOUT2:
+                Screens_PressureTimeout2Screen();
+                break;
+            case SCREENS_CONFIRM_SITE:
+                Screens_ConfirmSiteScreen();
+                break;
+        endswitch
+
+        // Update our screen index
+        current_screen_id := screen_index;
+
+endfunc
+
+func Screens_SplashScreen()
+
+    // Screens_SplashScreen 1.1 generated 3/27/2016 11:55:46 PM
+    gfx_BGcolour(WHITE) ;
+    gfx_Cls() ;
+
+    // Image1 1.0 generated 3/27/2016 11:55:46 PM
+    img_Show(hndl,iImage1) ;
+
+endfunc
+
+func Screens_UserBarcodeScreen()
+
+    // Screens_UserBarcodeScreen 1.1 generated 3/27/2016 11:57:00 PM
+    gfx_BGcolour(WHITE) ;
+    gfx_Cls() ;
+
+    // Strings2 1.1 generated 3/27/2016 11:57:00 PM
+    txt_FontID(hFont1) ; // Font index correct at time of code generation
+    txt_FGcolour(BLACK) ;
+    txt_BGcolour(WHITE) ;
+    gfx_MoveTo(4 , 120) ;
+    PrintDisk(hstrings, Strings2StartH, Strings2StartL, Strings2Size, 0) ; // where i is Page 0 - Strings2Count-1
+
+endfunc
+
+func Screens_PatientBarcodeScreen()
+    // Screens_PatientBarcodeScreen 1.1 generated 1/4/2016 6:08:54 PM
+    gfx_BGcolour(WHITE) ;
+    gfx_Cls() ;
+
+    // Strings1 1.1 generated 1/4/2016 6:08:55 PM
+    txt_FontID(hFont1) ; // Font index correct at time of code generation
+    txt_FGcolour(BLACK) ;
+    txt_BGcolour(WHITE) ;
+    gfx_MoveTo(0 , 76) ;
+    PrintDisk(hstrings, Strings1StartH, Strings1StartL, Strings1Size, 0) ; // where i is Page 0 - Strings1Count-1
+endfunc
+
+func Screens_PressureScreen(var p1p2)
+
+
+
+    // Screens_PressureScreen1 1.1 generated 4/13/2016 1:11:28 AM
+    gfx_BGcolour(WHITE) ;
+    gfx_Cls() ;
+
+    // Angularmeter1 1.0 generated 4/13/2016 1:11:28 AM
+    img_SetWord(hndl, iAngularmeter1, IMAGE_INDEX, 0) ; // where frame is 0 to 800 (for a displayed 0 to 80)
+    img_Show(hndl,iAngularmeter1) ;
+
+    if(p1p2 == 1)
+        // Strings20 1.1 generated 4/13/2016 4:24:07 AM
+        txt_FontID(hFont6) ; // Font index correct at time of code generation
+        txt_FGcolour(BLACK) ;
+        txt_BGcolour(WHITE) ;
+        gfx_MoveTo(0 , 216) ;
+        PrintDisk(hstrings, Strings20StartH, Strings20StartL, Strings20Size, 0) ; // where i is Page 0 - Strings20Count-1
+    endif
+
+    if(p1p2 == 2)
+        // Strings23 1.1 generated 4/13/2016 4:23:40 AM
+        txt_FontID(hFont9) ; // Font index correct at time of code generation
+        txt_FGcolour(BLACK) ;
+        txt_BGcolour(WHITE) ;
+        gfx_MoveTo(0 , 216) ;
+        PrintDisk(hstrings, Strings23StartH, Strings23StartL, Strings23Size, 0) ; // where i is Page 0 - Strings23Count-1
+    endif
+
+    // Set our pressure state so that we make sure we overwrite as soon as we get pressure data
+    previous_pressure_state := 2;
+
+    // Strings17 1.1 generated 4/13/2016 1:11:28 AM
+    txt_FontID(hFont3) ; // Font index correct at time of code generation
+    txt_FGcolour(BLACK) ;
+    txt_BGcolour(WHITE) ;
+    gfx_MoveTo(0 , 0) ;
+    PrintDisk(hstrings, Strings17StartH, Strings17StartL, Strings17Size, 0) ; // where i is Page 0 - Strings17Count-1
+
+endfunc
+
+func Screens_PressureScreen2()
+
+    // Screens_PressureScreen2 1.1 generated 1/4/2016 3:30:47 PM
+    gfx_BGcolour(WHITE) ;
+    gfx_Cls() ;
+
+    // Angularmeter2 1.0 generated 1/4/2016 3:30:47 PM
+    img_SetWord(hndl, iAngularmeter2, IMAGE_INDEX, 0) ; // where frame is 0 to 60 (for a displayed 0 to 6)
+    img_Show(hndl,iAngularmeter2) ;
+
+endfunc
+
+func Screens_SelectSiteScreen()
+    var state := 0;
+    var i := 0;
+
+    // Screens_SelectSiteScreen 1.1 generated 3/28/2016 4:12:42 AM
+    gfx_BGcolour(WHITE) ;
+    gfx_Cls() ;
+
+    // Winbutton1 1.0 generated 3/28/2016 4:12:42 AM
+    img_ClearAttributes(hndl, iWinbutton1, I_TOUCH_DISABLE); // set to enable touch, only need to do this once
+    img_Show(hndl, iWinbutton1);  // show button, only do this once
+    img_SetWord(hndl, iWinbutton1, IMAGE_INDEX, state); // where state is 0 for up and 1 for down
+    img_Show(hndl,iWinbutton1) ;
+
+    // Winbutton2 1.0 generated 3/28/2016 4:12:42 AM
+    img_ClearAttributes(hndl, iWinbutton2, I_TOUCH_DISABLE); // set to enable touch, only need to do this once
+    img_Show(hndl, iWinbutton2);  // show button, only do this once
+    img_SetWord(hndl, iWinbutton2, IMAGE_INDEX, state); // where state is 0 for up and 1 for down
+    img_Show(hndl,iWinbutton2) ;
+
+    // Winbutton3 1.0 generated 3/28/2016 4:12:42 AM
+    img_ClearAttributes(hndl, iWinbutton3, I_TOUCH_DISABLE); // set to enable touch, only need to do this once
+    img_Show(hndl, iWinbutton3);  // show button, only do this once
+    img_SetWord(hndl, iWinbutton3, IMAGE_INDEX, state); // where state is 0 for up and 1 for down
+    img_Show(hndl,iWinbutton3) ;
+
+    // Winbutton4 1.0 generated 3/28/2016 4:12:43 AM
+    img_ClearAttributes(hndl, iWinbutton4, I_TOUCH_DISABLE); // set to enable touch, only need to do this once
+    img_Show(hndl, iWinbutton4);  // show button, only do this once
+    img_SetWord(hndl, iWinbutton4, IMAGE_INDEX, state); // where state is 0 for up and 1 for down
+    img_Show(hndl,iWinbutton4) ;
+
+    // Strings7 1.1 generated 3/28/2016 4:12:43 AM
+    txt_FontID(hFont2) ; // Font index correct at time of code generation
+    txt_FGcolour(BLACK) ;
+    txt_BGcolour(WHITE) ;
+    gfx_MoveTo(0 , 0) ;
+    PrintDisk(hstrings, Strings7StartH, Strings7StartL, Strings7Size, i) ; // where i is Page 0 - Strings7Count-1
+
+    // Winbutton7 1.0 generated 3/28/2016 4:12:43 AM
+    img_ClearAttributes(hndl, iWinbutton7, I_TOUCH_DISABLE); // set to enable touch, only need to do this once
+    img_Show(hndl, iWinbutton7);  // show button, only do this once
+    img_SetWord(hndl, iWinbutton7, IMAGE_INDEX, state); // where state is 0 for up and 1 for down
+    img_Show(hndl,iWinbutton7) ;
+
+    // Winbutton8 1.0 generated 3/28/2016 4:12:43 AM
+    img_ClearAttributes(hndl, iWinbutton8, I_TOUCH_DISABLE); // set to enable touch, only need to do this once
+    img_Show(hndl, iWinbutton8);  // show button, only do this once
+    img_SetWord(hndl, iWinbutton8, IMAGE_INDEX, state); // where state is 0 for up and 1 for down
+    img_Show(hndl,iWinbutton8) ;
+
+
+endfunc
+
+func Screens_HealthySiteScreen()
+
+    // Screens_HealthySiteScreen 1.1 generated 1/26/2016 1:06:12 PM
+    gfx_BGcolour(WHITE) ;
+    gfx_Cls() ;
+
+    // Strings3 1.1 generated 1/26/2016 1:06:12 PM
+    txt_FontID(hFont3) ; // Font index correct at time of code generation
+    txt_FGcolour(BLACK) ;
+    txt_BGcolour(WHITE) ;
+    gfx_MoveTo(5 , 16) ;
+    PrintDisk(hstrings, Strings3StartH, Strings3StartL, Strings3Size, 0) ; // where i is Page 0 - Strings3Count-1
+
+endfunc
+
+func Screens_SuspectedSiteScreen()
+
+    // Screens_SuspectedSiteScreen 1.1 generated 1/26/2016 1:05:45 PM
+    gfx_BGcolour(WHITE) ;
+    gfx_Cls() ;
+
+    // Strings4 1.1 generated 1/26/2016 1:05:45 PM
+    txt_FontID(hFont4) ; // Font index correct at time of code generation
+    txt_FGcolour(BLACK) ;
+    txt_BGcolour(WHITE) ;
+    gfx_MoveTo(5 , 16) ;
+    PrintDisk(hstrings, Strings4StartH, Strings4StartL, Strings4Size, 0) ; // where i is Page 0 - Strings4Count-1
+
+endfunc
+
+func Screens_ThankYouScreen()
+
+    // Screens_ThankYouScreen 1.1 generated 3/28/2016 12:45:33 AM
+    gfx_BGcolour(WHITE) ;
+    gfx_Cls() ;
+
+    // Strings5 1.1 generated 3/28/2016 12:45:34 AM
+    txt_FontID(hFont2) ; // Font index correct at time of code generation
+    txt_FGcolour(BLACK) ;
+    txt_BGcolour(WHITE) ;
+    gfx_MoveTo(5 , 31) ;
+    PrintDisk(hstrings, Strings5StartH, Strings5StartL, Strings5Size, 0) ; // where i is Page 0 - Strings5Count-1
+
+endfunc
+
+func Screens_PressureTimeoutScreen()
+
+    // Screens_PressureTimeoutScreen 1.1 generated 4/13/2016 5:05:31 AM
+    gfx_BGcolour(WHITE) ;
+    gfx_Cls() ;
+
+    // Strings6 1.1 generated 4/13/2016 5:05:32 AM
+    txt_FontID(hFont2) ; // Font index correct at time of code generation
+    txt_FGcolour(BLACK) ;
+    txt_BGcolour(WHITE) ;
+    gfx_MoveTo(0 , 20) ;
+    PrintDisk(hstrings, Strings6StartH, Strings6StartL, Strings6Size, 0) ; // where i is Page 0 - Strings6Count-1
+
+endfunc
+
+func Screens_PressureTimeout2Screen()
+
+    // Screens_PressureTimeout2Screen 1.1 generated 3/28/2016 12:35:16 AM
+    gfx_BGcolour(WHITE) ;
+    gfx_Cls() ;
+
+    // Strings16 1.1 generated 3/28/2016 12:35:16 AM
+    txt_FontID(hFont2) ; // Font index correct at time of code generation
+    txt_FGcolour(BLACK) ;
+    txt_BGcolour(WHITE) ;
+    gfx_MoveTo(5 , 85) ;
+    PrintDisk(hstrings, Strings16StartH, Strings16StartL, Strings16Size, 0) ; // where i is Page 0 - Strings16Count-1
+
+endfunc
+
+func Screens_ConfirmSiteScreen()
+    var state := 0;
+    var i := 0;
+
+    // Screens_ConfirmSiteScreen 1.1 generated 3/28/2016 12:09:16 AM
+    gfx_BGcolour(WHITE) ;
+    gfx_Cls() ;
+
+    // Winbutton5 1.0 generated 3/28/2016 12:09:16 AM
+    img_ClearAttributes(hndl, iWinbutton5, I_TOUCH_DISABLE); // set to enable touch, only need to do this once
+    img_Show(hndl, iWinbutton5);  // show button, only do this once
+    img_SetWord(hndl, iWinbutton5, IMAGE_INDEX, state); // where state is 0 for up and 1 for down
+    img_Show(hndl,iWinbutton5) ;
+
+    // Winbutton6 1.0 generated 3/28/2016 12:09:16 AM
+    img_ClearAttributes(hndl, iWinbutton6, I_TOUCH_DISABLE); // set to enable touch, only need to do this once
+    img_Show(hndl, iWinbutton6);  // show button, only do this once
+    img_SetWord(hndl, iWinbutton6, IMAGE_INDEX, state); // where state is 0 for up and 1 for down
+    img_Show(hndl,iWinbutton6) ;
+
+    // Strings10 1.1 generated 3/28/2016 12:09:16 AM
+    txt_FontID(hFont2) ; // Font index correct at time of code generation
+    txt_FGcolour(BLACK) ;
+    txt_BGcolour(WHITE) ;
+    gfx_MoveTo(0 , 172) ;
+    PrintDisk(hstrings, Strings10StartH, Strings10StartL, Strings10Size, i) ; // where i is Page 0 - Strings10Count-1
+
+    // Strings11 1.1 generated 3/28/2016 12:09:16 AM
+    txt_FontID(hFont2) ; // Font index correct at time of code generation
+    txt_FGcolour(BLACK) ;
+    txt_BGcolour(WHITE) ;
+    gfx_MoveTo(0 , 0) ;
+    PrintDisk(hstrings, Strings11StartH, Strings11StartL, Strings11Size, i) ; // where i is Page 0 - Strings11Count-1
+
+    switch(selected_site)
+        case 1:
+            // Strings8 1.1 generated 3/28/2016 12:09:16 AM
+            txt_FontID(hFont2) ; // Font index correct at time of code generation
+            txt_FGcolour(0x1642) ;
+            txt_BGcolour(WHITE) ;
+            gfx_MoveTo(0 , 84) ;
+            PrintDisk(hstrings, Strings8StartH, Strings8StartL, Strings8Size, i) ; // where i is Page 0 - Strings8Count-1
+            break;
+        case 2:
+            // Strings9 1.1 generated 3/28/2016 12:09:16 AM
+            txt_FontID(hFont2) ; // Font index correct at time of code generation
+            txt_FGcolour(0x1642) ;
+            txt_BGcolour(WHITE) ;
+            gfx_MoveTo(0 , 84) ;
+            PrintDisk(hstrings, Strings9StartH, Strings9StartL, Strings9Size, i) ; // where i is Page 0 - Strings9Count-1
+            break;
+        case 3:
+            // Strings13 1.1 generated 3/28/2016 12:09:17 AM
+            txt_FontID(hFont2) ; // Font index correct at time of code generation
+            txt_FGcolour(0x1642) ;
+            txt_BGcolour(WHITE) ;
+            gfx_MoveTo(0 , 84) ;
+            PrintDisk(hstrings, Strings13StartH, Strings13StartL, Strings13Size, i) ; // where i is Page 0 - Strings13Count-1
+            break;
+        case 4:
+            // Strings12 1.1 generated 3/28/2016 12:09:16 AM
+            txt_FontID(hFont2) ; // Font index correct at time of code generation
+            txt_FGcolour(0x1642) ;
+            txt_BGcolour(WHITE) ;
+            gfx_MoveTo(0 , 84) ;
+            PrintDisk(hstrings, Strings12StartH, Strings12StartL, Strings12Size, i) ; // where i is Page 0 - Strings12Count-1
+            break;
+         case 5:
+            // Strings14 1.1 generated 3/28/2016 12:09:17 AM
+            txt_FontID(hFont2) ; // Font index correct at time of code generation
+            txt_FGcolour(0x1642) ;
+            txt_BGcolour(WHITE) ;
+            gfx_MoveTo(0 , 84) ;
+            PrintDisk(hstrings, Strings14StartH, Strings14StartL, Strings14Size, i) ; // where i is Page 0 - Strings14Count-1
+            break;
+        case 6:
+            // Strings15 1.1 generated 3/28/2016 4:15:35 AM
+            txt_FontID(hFont2) ; // Font index correct at time of code generation
+            txt_FGcolour(0x1642) ;
+            txt_BGcolour(WHITE) ;
+            gfx_MoveTo(0 , 84) ;
+            PrintDisk(hstrings, Strings15StartH, Strings15StartL, Strings15Size, i) ; // where i is Page 0 - Strings15Count-1
+            break;
+
+
+
+    endswitch
+endfunc
+
+//
+//
+// Utilities
+//
+//
+func Utilities_ConvertHexStringToInt(var string_pointer)
+    var converted_value := 0;
+
+    var character_index;
+    for(character_index := 0; character_index < 4; character_index++)
+        // Convert the individual digit
+        var digit_value;
+        digit_value := Utilities_ConvertHexDigitToNumber(string_pointer[character_index]);
+
+        // Determine how much to shift the value
+        var amount_to_shift := 0;
+        amount_to_shift := (3 - character_index) * 4;
+
+        // Add the amount
+        converted_value := converted_value + digit_value << amount_to_shift;
+    next
+
+    // Return the converted value
+    return converted_value;
+endfunc
+
+func Utilities_ConvertHexDigitToNumber(var character_to_convert)
+    switch(character_to_convert)
+        case '0':
+        case '1':
+        case '2':
+        case '3':
+        case '4':
+        case '5':
+        case '6':
+        case '7':
+        case '8':
+        case '9':
+            return character_to_convert - '0';
+        case 'A':
+        case 'B':
+        case 'C':
+        case 'D':
+        case 'E':
+        case 'F':
+            return (character_to_convert - 'A' + 10);
+        case 'a':
+        case 'b':
+        case 'c':
+        case 'd':
+        case 'e':
+        case 'f':
+            return (character_to_convert - 'a' + 10);
+    endswitch
+
+    // Improper character? Ignore it
+    return 0;
+endfunc

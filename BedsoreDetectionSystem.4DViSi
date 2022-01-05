@@ -1,0 +1,1243 @@
+﻿Version     0.0
+Platform    uLCD-24PTU-P
+PlatRes     240x320
+Depends
+end
+Options
+    Visualizer
+    Speed                        9600
+    Checksum                     No
+    ResponseSize                 2
+    Multidrop                    No
+    Destination                  1
+    MainForm                     0
+    SndBuf                       0
+    ButtonDisable                No
+    SignedDigits                 No
+end
+Form
+    Name                         Screens_SplashScreen
+    Alias                        SplashScreen
+    Bgtype                       Color
+    Color                        WHITE
+    Image                        (None)
+    Source.Height                0
+    Source.Left                  0
+    Source.Top                   0
+    Source.Width                 0
+    OnActivate                   ''
+    OnCreate                     ''
+    OnRepeat                     ''
+    OnTouchMoving                ''
+    OnTouchPressed               ''
+    OnTouchReleased              ''
+end
+Image
+    Name                         Image1
+    Alias                        Image1
+    Height                       93
+    Image                        RubitectionLogo.png
+    Left                         32
+    Source.Height                121
+    Source.Left                  0
+    Source.Top                   0
+    Source.Width                 246
+    Top                          104
+    Width                        179
+    OnTouchMoving                ''
+    OnTouchPressed               ''
+    OnTouchReleased              ''
+end
+Form
+    Name                         Screens_UserBarcodeScreen
+    Alias                        UserBarcodeScreen
+    Bgtype                       Color
+    Color                        WHITE
+    Image                        (None)
+    Source.Height                0
+    Source.Left                  0
+    Source.Top                   0
+    Source.Width                 0
+    OnActivate                   ''
+    OnCreate                     ''
+    OnRepeat                     ''
+    OnTouchMoving                ''
+    OnTouchPressed               ''
+    OnTouchReleased              ''
+end
+Strings
+    Name                         Strings2
+    Alias                        Strings2
+    Alignment                    Center
+    BGcolor                      WHITE
+    Height                       140
+    FGcolor                      BLACK
+    Font.Bold                    No
+    Font.CharSet                 ANSI
+    Font.Italic                  No
+    Font.Name                    Tahoma
+    Font.Opaque                  Yes
+    Font.Size                    40
+    Font.Strikethrough           No
+    Font.Underline               No
+    Left                         0
+    Strings                      'Scan your\nbar code\n'
+    StringsStyle                 Book
+    Top                          120
+    Width                        240
+    OnChanged                    ''
+end
+Form
+    Name                         Screens_SelectSiteScreen
+    Alias                        SelectSiteScreen
+    Bgtype                       Color
+    Color                        WHITE
+    Image                        (None)
+    Source.Height                0
+    Source.Left                  0
+    Source.Top                   0
+    Source.Width                 0
+    OnActivate                   ''
+    OnCreate                     ''
+    OnRepeat                     ''
+    OnTouchMoving                ''
+    OnTouchPressed               ''
+    OnTouchReleased              ''
+end
+WinButton
+    Name                         Winbutton1
+    Alias                        Winbutton1
+    Appearance.Alignment         Center
+    Appearance.Layout            Left
+    Appearance.PictureAlignment  Right
+    Appearance.SimpleLayout      No
+    Appearance.Spacing           3
+    AutoSizeToPicture            No
+    Bevel                        Yes
+    BevelColor                   clWhite
+    Caption                      Heel
+    Color                        0xD2D2D2
+    Font.Color                   clWindowText
+    Font.Effects                 []
+    Font.Name                    Tahoma
+    Font.Size                    14
+    Font.Style                   []
+    Height                       40
+    Left                         20
+    Matrix                       -1
+    Momentary                    Yes
+    Picture                      (None)
+    StatusWhenOff.BGcolor        RED
+    StatusWhenOff.Caption        ''
+    StatusWhenOff.Glow           Yes
+    StatusWhenOff.Color          WHITE
+    StatusWhenOff.Effects        []
+    StatusWhenOff.Name           Tahoma
+    StatusWhenOff.Size           8
+    StatusWhenOff.Style          []
+    StatusWhenOff.Visible        Yes
+    StatusWhenOn.BGcolor         RED
+    StatusWhenOn.Caption         ''
+    StatusWhenOn.Glow            Yes
+    StatusWhenOn.Color           WHITE
+    StatusWhenOn.Effects         []
+    StatusWhenOn.Name            Tahoma
+    StatusWhenOn.Size            8
+    StatusWhenOn.Style           []
+    StatusWhenOn.Visible         Yes
+    Top                          80
+    Width                        200
+    OnChanged                    ''
+    OnTouchMoving                ''
+    OnTouchPressed               ''
+    OnTouchReleased              ''
+end
+WinButton
+    Name                         Winbutton2
+    Alias                        Winbutton2
+    Appearance.Alignment         Center
+    Appearance.Layout            Left
+    Appearance.PictureAlignment  Right
+    Appearance.SimpleLayout      No
+    Appearance.Spacing           3
+    AutoSizeToPicture            No
+    Bevel                        Yes
+    BevelColor                   clWhite
+    Caption                      Sacrum
+    Color                        0xD2D2D2
+    Font.Color                   clWindowText
+    Font.Effects                 []
+    Font.Name                    Tahoma
+    Font.Size                    14
+    Font.Style                   []
+    Height                       40
+    Left                         20
+    Matrix                       -1
+    Momentary                    Yes
+    Picture                      (None)
+    StatusWhenOff.BGcolor        RED
+    StatusWhenOff.Caption        ''
+    StatusWhenOff.Glow           Yes
+    StatusWhenOff.Color          WHITE
+    StatusWhenOff.Effects        []
+    StatusWhenOff.Name           Tahoma
+    StatusWhenOff.Size           8
+    StatusWhenOff.Style          []
+    StatusWhenOff.Visible        Yes
+    StatusWhenOn.BGcolor         RED
+    StatusWhenOn.Caption         ''
+    StatusWhenOn.Glow            Yes
+    StatusWhenOn.Color           WHITE
+    StatusWhenOn.Effects         []
+    StatusWhenOn.Name            Tahoma
+    StatusWhenOn.Size            8
+    StatusWhenOn.Style           []
+    StatusWhenOn.Visible         Yes
+    Top                          120
+    Width                        200
+    OnChanged                    ''
+    OnTouchMoving                ''
+    OnTouchPressed               ''
+    OnTouchReleased              ''
+end
+WinButton
+    Name                         Winbutton3
+    Alias                        Winbutton3
+    Appearance.Alignment         Center
+    Appearance.Layout            Left
+    Appearance.PictureAlignment  Right
+    Appearance.SimpleLayout      No
+    Appearance.Spacing           3
+    AutoSizeToPicture            No
+    Bevel                        Yes
+    BevelColor                   clWhite
+    Caption                      Coccyx
+    Color                        0xD2D2D2
+    Font.Color                   clWindowText
+    Font.Effects                 []
+    Font.Name                    Tahoma
+    Font.Size                    14
+    Font.Style                   []
+    Height                       40
+    Left                         20
+    Matrix                       -1
+    Momentary                    Yes
+    Picture                      (None)
+    StatusWhenOff.BGcolor        RED
+    StatusWhenOff.Caption        ''
+    StatusWhenOff.Glow           Yes
+    StatusWhenOff.Color          WHITE
+    StatusWhenOff.Effects        []
+    StatusWhenOff.Name           Tahoma
+    StatusWhenOff.Size           8
+    StatusWhenOff.Style          []
+    StatusWhenOff.Visible        Yes
+    StatusWhenOn.BGcolor         RED
+    StatusWhenOn.Caption         ''
+    StatusWhenOn.Glow            Yes
+    StatusWhenOn.Color           WHITE
+    StatusWhenOn.Effects         []
+    StatusWhenOn.Name            Tahoma
+    StatusWhenOn.Size            8
+    StatusWhenOn.Style           []
+    StatusWhenOn.Visible         Yes
+    Top                          160
+    Width                        200
+    OnChanged                    ''
+    OnTouchMoving                ''
+    OnTouchPressed               ''
+    OnTouchReleased              ''
+end
+WinButton
+    Name                         Winbutton4
+    Alias                        Winbutton4
+    Appearance.Alignment         Center
+    Appearance.Layout            Left
+    Appearance.PictureAlignment  Right
+    Appearance.SimpleLayout      No
+    Appearance.Spacing           3
+    AutoSizeToPicture            No
+    Bevel                        Yes
+    BevelColor                   clWhite
+    Caption                      'Shoulder Blade'
+    Color                        0xD2D2D2
+    Font.Color                   clWindowText
+    Font.Effects                 []
+    Font.Name                    Tahoma
+    Font.Size                    14
+    Font.Style                   []
+    Height                       40
+    Left                         20
+    Matrix                       -1
+    Momentary                    Yes
+    Picture                      (None)
+    StatusWhenOff.BGcolor        RED
+    StatusWhenOff.Caption        ''
+    StatusWhenOff.Glow           Yes
+    StatusWhenOff.Color          WHITE
+    StatusWhenOff.Effects        []
+    StatusWhenOff.Name           Tahoma
+    StatusWhenOff.Size           8
+    StatusWhenOff.Style          []
+    StatusWhenOff.Visible        Yes
+    StatusWhenOn.BGcolor         RED
+    StatusWhenOn.Caption         ''
+    StatusWhenOn.Glow            Yes
+    StatusWhenOn.Color           WHITE
+    StatusWhenOn.Effects         []
+    StatusWhenOn.Name            Tahoma
+    StatusWhenOn.Size            8
+    StatusWhenOn.Style           []
+    StatusWhenOn.Visible         Yes
+    Top                          200
+    Width                        200
+    OnChanged                    ''
+    OnTouchMoving                ''
+    OnTouchPressed               ''
+    OnTouchReleased              ''
+end
+Strings
+    Name                         Strings7
+    Alias                        Strings7
+    Alignment                    Center
+    BGcolor                      WHITE
+    Height                       138
+    FGcolor                      BLACK
+    Font.Bold                    No
+    Font.CharSet                 ANSI
+    Font.Italic                  No
+    Font.Name                    Tahoma
+    Font.Opaque                  Yes
+    Font.Size                    40
+    Font.Strikethrough           No
+    Font.Underline               No
+    Left                         0
+    Strings                      'Select site \nto measure\n'
+    StringsStyle                 Book
+    Top                          0
+    Width                        240
+    OnChanged                    ''
+end
+WinButton
+    Name                         Winbutton7
+    Alias                        Winbutton7
+    Appearance.Alignment         Center
+    Appearance.Layout            Left
+    Appearance.PictureAlignment  Right
+    Appearance.SimpleLayout      No
+    Appearance.Spacing           3
+    AutoSizeToPicture            No
+    Bevel                        Yes
+    BevelColor                   clWhite
+    Caption                      Hips
+    Color                        0xD2D2D2
+    Font.Color                   clWindowText
+    Font.Effects                 []
+    Font.Name                    Tahoma
+    Font.Size                    14
+    Font.Style                   []
+    Height                       40
+    Left                         20
+    Matrix                       -1
+    Momentary                    Yes
+    Picture                      (None)
+    StatusWhenOff.BGcolor        RED
+    StatusWhenOff.Caption        ''
+    StatusWhenOff.Glow           Yes
+    StatusWhenOff.Color          WHITE
+    StatusWhenOff.Effects        []
+    StatusWhenOff.Name           Tahoma
+    StatusWhenOff.Size           8
+    StatusWhenOff.Style          []
+    StatusWhenOff.Visible        Yes
+    StatusWhenOn.BGcolor         RED
+    StatusWhenOn.Caption         ''
+    StatusWhenOn.Glow            Yes
+    StatusWhenOn.Color           WHITE
+    StatusWhenOn.Effects         []
+    StatusWhenOn.Name            Tahoma
+    StatusWhenOn.Size            8
+    StatusWhenOn.Style           []
+    StatusWhenOn.Visible         Yes
+    Top                          240
+    Width                        200
+    OnChanged                    ''
+    OnTouchMoving                ''
+    OnTouchPressed               ''
+    OnTouchReleased              ''
+end
+WinButton
+    Name                         Winbutton8
+    Alias                        Winbutton8
+    Appearance.Alignment         Center
+    Appearance.Layout            Left
+    Appearance.PictureAlignment  Right
+    Appearance.SimpleLayout      No
+    Appearance.Spacing           3
+    AutoSizeToPicture            No
+    Bevel                        Yes
+    BevelColor                   clWhite
+    Caption                      'Ischial Tuberosity'
+    Color                        0xD2D2D2
+    Font.Color                   clWindowText
+    Font.Effects                 []
+    Font.Name                    Tahoma
+    Font.Size                    13
+    Font.Style                   []
+    Height                       40
+    Left                         20
+    Matrix                       -1
+    Momentary                    Yes
+    Picture                      (None)
+    StatusWhenOff.BGcolor        RED
+    StatusWhenOff.Caption        ''
+    StatusWhenOff.Glow           Yes
+    StatusWhenOff.Color          WHITE
+    StatusWhenOff.Effects        []
+    StatusWhenOff.Name           Tahoma
+    StatusWhenOff.Size           8
+    StatusWhenOff.Style          []
+    StatusWhenOff.Visible        Yes
+    StatusWhenOn.BGcolor         RED
+    StatusWhenOn.Caption         ''
+    StatusWhenOn.Glow            Yes
+    StatusWhenOn.Color           WHITE
+    StatusWhenOn.Effects         []
+    StatusWhenOn.Name            Tahoma
+    StatusWhenOn.Size            8
+    StatusWhenOn.Style           []
+    StatusWhenOn.Visible         Yes
+    Top                          280
+    Width                        200
+    OnChanged                    ''
+    OnTouchMoving                ''
+    OnTouchPressed               ''
+    OnTouchReleased              ''
+end
+Form
+    Name                         Screens_PressureScreen1
+    Alias                        PressureScreen1
+    Bgtype                       Color
+    Color                        WHITE
+    Image                        (None)
+    Source.Height                0
+    Source.Left                  0
+    Source.Top                   0
+    Source.Width                 0
+    OnActivate                   ''
+    OnCreate                     ''
+    OnRepeat                     ''
+    OnTouchMoving                ''
+    OnTouchPressed               ''
+    OnTouchReleased              ''
+end
+AngularMeter
+    Name                         Angularmeter1
+    Alias                        Angularmeter1
+    Angle                        30
+    AngleOffset                  300
+    Caption                      mmHg
+    CaptionXOffset               0
+    CaptionYOffset               -35
+    CenterDotColor               WHITE
+    CenterDotWidth               2
+    Color                        WHITE
+    ColorZone1                   RED
+    ColorZone2                   GREEN
+    ColorZone3                   clRed
+    Decimals                     1
+    Font.Color                   BLACK
+    Font.Effects                 []
+    Font.Name                    Tahoma
+    Font.Size                    10
+    Font.Style                   []
+    Height                       184
+    Labels                       8
+    LabelsFont.Color             BLACK
+    LabelsFont.Effects           []
+    LabelsFont.Name              Tahoma
+    LabelsFont.Size              8
+    LabelsFont.Style             []
+    LabelsOffset                 34
+    Left                         20
+    Maxvalue                     80
+    Minvalue                     0
+    NeedleBasewidth              8
+    NeedleColor                  0x640915
+    NeedleLength                 50
+    Percent1                     73
+    Percent2                     17
+    Radius                       100
+    Spacing                      50
+    Ticks                        32
+    TicksColor                   clWhite
+    TicksEnlarge                 4
+    TicksMax                     18
+    TicksMin                     5
+    Top                          24
+    Width                        200
+    OnChanged                    ''
+end
+Strings
+    Name                         Strings17
+    Alias                        Strings17
+    Alignment                    Center
+    BGcolor                      WHITE
+    Height                       34
+    FGcolor                      BLACK
+    Font.Bold                    Yes
+    Font.CharSet                 ANSI
+    Font.Italic                  No
+    Font.Name                    Tahoma
+    Font.Opaque                  Yes
+    Font.Size                    24
+    Font.Strikethrough           No
+    Font.Underline               No
+    Left                         0
+    Strings                      'Pressure On Skin'
+    StringsStyle                 Book
+    Top                          0
+    Width                        240
+    OnChanged                    ''
+end
+Strings
+    Name                         Strings18
+    Alias                        Strings18
+    Alignment                    Center
+    BGcolor                      WHITE
+    Height                       34
+    FGcolor                      BLACK
+    Font.Bold                    Yes
+    Font.CharSet                 ANSI
+    Font.Italic                  No
+    Font.Name                    Tahoma
+    Font.Opaque                  Yes
+    Font.Size                    24
+    Font.Strikethrough           No
+    Font.Underline               No
+    Left                         0
+    Strings                      BALANCED\n
+    StringsStyle                 Book
+    Top                          286
+    Width                        240
+    OnChanged                    ''
+end
+Strings
+    Name                         Strings19
+    Alias                        Strings19
+    Alignment                    Center
+    BGcolor                      WHITE
+    Height                       34
+    FGcolor                      RED
+    Font.Bold                    Yes
+    Font.CharSet                 ANSI
+    Font.Italic                  No
+    Font.Name                    Tahoma
+    Font.Opaque                  Yes
+    Font.Size                    24
+    Font.Strikethrough           No
+    Font.Underline               No
+    Left                         0
+    Strings                      'NOT BALANCED\n'
+    StringsStyle                 Book
+    Top                          286
+    Width                        240
+    OnChanged                    ''
+end
+Strings
+    Name                         Strings20
+    Alias                        Strings20
+    Alignment                    Center
+    BGcolor                      WHITE
+    Height                       55
+    FGcolor                      BLACK
+    Font.Bold                    Yes
+    Font.CharSet                 ANSI
+    Font.Italic                  No
+    Font.Name                    Tahoma
+    Font.Opaque                  Yes
+    Font.Size                    24
+    Font.Strikethrough           No
+    Font.Underline               No
+    Left                         0
+    Strings                      'Put device on\nbedsore site\n'
+    StringsStyle                 Book
+    Top                          216
+    Width                        240
+    OnChanged                    ''
+end
+Strings
+    Name                         Strings21
+    Alias                        Strings21
+    Alignment                    Center
+    BGcolor                      WHITE
+    Height                       54
+    FGcolor                      BLACK
+    Font.Bold                    Yes
+    Font.CharSet                 ANSI
+    Font.Italic                  No
+    Font.Name                    Tahoma
+    Font.Opaque                  Yes
+    Font.Size                    24
+    Font.Strikethrough           No
+    Font.Underline               No
+    Left                         0
+    Strings                      '65 mmHg exceeded. \nGo to green region\n'
+    StringsStyle                 Book
+    Top                          216
+    Width                        240
+    OnChanged                    ''
+end
+Strings
+    Name                         Strings22
+    Alias                        Strings22
+    Alignment                    Center
+    BGcolor                      WHITE
+    Height                       55
+    FGcolor                      BLACK
+    Font.Bold                    Yes
+    Font.CharSet                 ANSI
+    Font.Italic                  No
+    Font.Name                    Tahoma
+    Font.Opaque                  Yes
+    Font.Size                    24
+    Font.Strikethrough           No
+    Font.Underline               No
+    Left                         0
+    Strings                      'Hold at 65 mmHg\n'
+    StringsStyle                 Book
+    Top                          216
+    Width                        240
+    OnChanged                    ''
+end
+Strings
+    Name                         Strings23
+    Alias                        Strings23
+    Alignment                    Center
+    BGcolor                      WHITE
+    Height                       55
+    FGcolor                      BLACK
+    Font.Bold                    Yes
+    Font.CharSet                 ANSI
+    Font.Italic                  No
+    Font.Name                    Tahoma
+    Font.Opaque                  Yes
+    Font.Size                    24
+    Font.Strikethrough           No
+    Font.Underline               No
+    Left                         0
+    Strings                      'Select nearby\nhealthy site\n'
+    StringsStyle                 Book
+    Top                          216
+    Width                        240
+    OnChanged                    ''
+end
+Strings
+    Name                         Strings24
+    Alias                        Strings24
+    Alignment                    Center
+    BGcolor                      WHITE
+    Height                       55
+    FGcolor                      BLACK
+    Font.Bold                    Yes
+    Font.CharSet                 ANSI
+    Font.Italic                  No
+    Font.Name                    Tahoma
+    Font.Opaque                  Yes
+    Font.Size                    24
+    Font.Strikethrough           No
+    Font.Underline               No
+    Left                         0
+    Strings                      'Push to 65 mmHg\n'
+    StringsStyle                 Book
+    Top                          216
+    Width                        240
+    OnChanged                    ''
+end
+Form
+    Name                         Screens_PatientBarcodeScreen
+    Alias                        PatientBarcodeScreen
+    Bgtype                       Color
+    Color                        WHITE
+    Image                        (None)
+    Source.Height                0
+    Source.Left                  0
+    Source.Top                   0
+    Source.Width                 0
+    OnActivate                   ''
+    OnCreate                     ''
+    OnRepeat                     ''
+    OnTouchMoving                ''
+    OnTouchPressed               ''
+    OnTouchReleased              ''
+end
+Strings
+    Name                         Strings1
+    Alias                        Strings1
+    Alignment                    Center
+    BGcolor                      WHITE
+    Height                       142
+    FGcolor                      BLACK
+    Font.Bold                    No
+    Font.CharSet                 ANSI
+    Font.Italic                  No
+    Font.Name                    Tahoma
+    Font.Opaque                  Yes
+    Font.Size                    40
+    Font.Strikethrough           No
+    Font.Underline               No
+    Left                         0
+    Strings                      'Scan\npatient''s\nbar code\n'
+    StringsStyle                 Book
+    Top                          140
+    Width                        240
+    OnChanged                    ''
+end
+Form
+    Name                         Screens_PressureScreen2
+    Alias                        PressureScreen2
+    Bgtype                       Color
+    Color                        WHITE
+    Image                        (None)
+    Source.Height                0
+    Source.Left                  0
+    Source.Top                   0
+    Source.Width                 0
+    OnActivate                   ''
+    OnCreate                     ''
+    OnRepeat                     ''
+    OnTouchMoving                ''
+    OnTouchPressed               ''
+    OnTouchReleased              ''
+end
+AngularMeter
+    Name                         Angularmeter2
+    Alias                        Angularmeter2
+    Angle                        30
+    AngleOffset                  300
+    Caption                      'Pressure Value (N)'
+    CaptionXOffset               0
+    CaptionYOffset               90
+    CenterDotColor               WHITE
+    CenterDotWidth               2
+    Color                        WHITE
+    ColorZone1                   RED
+    ColorZone2                   GREEN
+    ColorZone3                   clRed
+    Decimals                     1
+    Font.Color                   BLACK
+    Font.Effects                 []
+    Font.Name                    Tahoma
+    Font.Size                    10
+    Font.Style                   []
+    Height                       240
+    Labels                       5
+    LabelsFont.Color             BLACK
+    LabelsFont.Effects           []
+    LabelsFont.Name              Tahoma
+    LabelsFont.Size              8
+    LabelsFont.Style             []
+    LabelsOffset                 30
+    Left                         0
+    Maxvalue                     5
+    Minvalue                     0
+    NeedleBasewidth              8
+    NeedleColor                  0x640915
+    NeedleLength                 60
+    Percent1                     76
+    Percent2                     17
+    Radius                       120
+    Spacing                      50
+    Ticks                        25
+    TicksColor                   clWhite
+    TicksEnlarge                 5
+    TicksMax                     18
+    TicksMin                     5
+    Top                          0
+    Width                        240
+    OnChanged                    ''
+end
+Form
+    Name                         Screens_HealthySiteScreen
+    Alias                        HealthySiteScreen
+    Bgtype                       Color
+    Color                        WHITE
+    Image                        (None)
+    Source.Height                0
+    Source.Left                  0
+    Source.Top                   0
+    Source.Width                 0
+    OnActivate                   ''
+    OnCreate                     ''
+    OnRepeat                     ''
+    OnTouchMoving                ''
+    OnTouchPressed               ''
+    OnTouchReleased              ''
+end
+Strings
+    Name                         Strings3
+    Alias                        Strings3
+    Alignment                    Center
+    BGcolor                      WHITE
+    Height                       200
+    FGcolor                      BLACK
+    Font.Bold                    No
+    Font.CharSet                 ANSI
+    Font.Italic                  No
+    Font.Name                    Tahoma
+    Font.Opaque                  Yes
+    Font.Size                    40
+    Font.Strikethrough           No
+    Font.Underline               No
+    Left                         0
+    Strings                      'Measurement on bedsore \nsite complete'
+    StringsStyle                 Book
+    Top                          105
+    Width                        240
+    OnChanged                    ''
+end
+Form
+    Name                         Screens_SuspectedSiteScreen
+    Alias                        SuspectedSiteScreen
+    Bgtype                       Color
+    Color                        WHITE
+    Image                        (None)
+    Source.Height                0
+    Source.Left                  0
+    Source.Top                   0
+    Source.Width                 0
+    OnActivate                   ''
+    OnCreate                     ''
+    OnRepeat                     ''
+    OnTouchMoving                ''
+    OnTouchPressed               ''
+    OnTouchReleased              ''
+end
+Strings
+    Name                         Strings4
+    Alias                        Strings4
+    Alignment                    Center
+    BGcolor                      WHITE
+    Height                       289
+    FGcolor                      BLACK
+    Font.Bold                    No
+    Font.CharSet                 ANSI
+    Font.Italic                  No
+    Font.Name                    Tahoma
+    Font.Opaque                  Yes
+    Font.Size                    40
+    Font.Strikethrough           No
+    Font.Underline               No
+    Left                         5
+    Strings                      'Healthy site measurement complete! Please place the device near the suspected \nbedsore.'
+    StringsStyle                 Book
+    Top                          16
+    Width                        240
+    OnChanged                    ''
+end
+Form
+    Name                         Screens_ThankYouScreen
+    Alias                        ThankYouScreen
+    Bgtype                       Color
+    Color                        WHITE
+    Image                        (None)
+    Source.Height                0
+    Source.Left                  0
+    Source.Top                   0
+    Source.Width                 0
+    OnActivate                   ''
+    OnCreate                     ''
+    OnRepeat                     ''
+    OnTouchMoving                ''
+    OnTouchPressed               ''
+    OnTouchReleased              ''
+end
+Strings
+    Name                         Strings5
+    Alias                        Strings5
+    Alignment                    Center
+    BGcolor                      WHITE
+    Height                       289
+    FGcolor                      BLACK
+    Font.Bold                    No
+    Font.CharSet                 ANSI
+    Font.Italic                  No
+    Font.Name                    Tahoma
+    Font.Opaque                  Yes
+    Font.Size                    40
+    Font.Strikethrough           No
+    Font.Underline               No
+    Left                         5
+    Strings                      'All measurements complete.\n\nThank you for improving patient care.\n'
+    StringsStyle                 Book
+    Top                          31
+    Width                        240
+    OnChanged                    ''
+end
+Form
+    Name                         Screens_PressureTimeoutScreen
+    Alias                        PressureTimeoutScreen
+    Bgtype                       Color
+    Color                        WHITE
+    Image                        (None)
+    Source.Height                0
+    Source.Left                  0
+    Source.Top                   0
+    Source.Width                 0
+    OnActivate                   ''
+    OnCreate                     ''
+    OnRepeat                     ''
+    OnTouchMoving                ''
+    OnTouchPressed               ''
+    OnTouchReleased              ''
+end
+Strings
+    Name                         Strings6
+    Alias                        Strings6
+    Alignment                    Center
+    BGcolor                      WHITE
+    Height                       308
+    FGcolor                      BLACK
+    Font.Bold                    No
+    Font.CharSet                 ANSI
+    Font.Italic                  No
+    Font.Name                    Tahoma
+    Font.Opaque                  Yes
+    Font.Size                    40
+    Font.Strikethrough           No
+    Font.Underline               No
+    Left                         0
+    Strings                      '\nTimed out.\n\n65 mmHg of pressure not reached.\n'
+    StringsStyle                 Book
+    Top                          20
+    Width                        240
+    OnChanged                    ''
+end
+Form
+    Name                         Screens_ConfirmSiteScreen
+    Alias                        ConfirmSiteScreen
+    Bgtype                       Color
+    Color                        WHITE
+    Image                        (None)
+    Source.Height                0
+    Source.Left                  0
+    Source.Top                   0
+    Source.Width                 0
+    OnActivate                   ''
+    OnCreate                     ''
+    OnRepeat                     ''
+    OnTouchMoving                ''
+    OnTouchPressed               ''
+    OnTouchReleased              ''
+end
+WinButton
+    Name                         Winbutton5
+    Alias                        Winbutton5
+    Appearance.Alignment         Center
+    Appearance.Layout            Left
+    Appearance.PictureAlignment  Right
+    Appearance.SimpleLayout      No
+    Appearance.Spacing           3
+    AutoSizeToPicture            No
+    Bevel                        Yes
+    BevelColor                   clWhite
+    Caption                      Yes
+    Color                        0xD2D2D2
+    Font.Color                   clWindowText
+    Font.Effects                 []
+    Font.Name                    Tahoma
+    Font.Size                    10
+    Font.Style                   []
+    Height                       80
+    Left                         122
+    Matrix                       -1
+    Momentary                    Yes
+    Picture                      (None)
+    StatusWhenOff.BGcolor        RED
+    StatusWhenOff.Caption        ''
+    StatusWhenOff.Glow           Yes
+    StatusWhenOff.Color          WHITE
+    StatusWhenOff.Effects        []
+    StatusWhenOff.Name           Tahoma
+    StatusWhenOff.Size           8
+    StatusWhenOff.Style          []
+    StatusWhenOff.Visible        Yes
+    StatusWhenOn.BGcolor         RED
+    StatusWhenOn.Caption         ''
+    StatusWhenOn.Glow            Yes
+    StatusWhenOn.Color           WHITE
+    StatusWhenOn.Effects         []
+    StatusWhenOn.Name            Tahoma
+    StatusWhenOn.Size            8
+    StatusWhenOn.Style           []
+    StatusWhenOn.Visible         Yes
+    Top                          210
+    Width                        110
+    OnChanged                    ''
+    OnTouchMoving                ''
+    OnTouchPressed               ''
+    OnTouchReleased              ''
+end
+WinButton
+    Name                         Winbutton6
+    Alias                        Winbutton6
+    Appearance.Alignment         Center
+    Appearance.Layout            Left
+    Appearance.PictureAlignment  Right
+    Appearance.SimpleLayout      No
+    Appearance.Spacing           3
+    AutoSizeToPicture            No
+    Bevel                        Yes
+    BevelColor                   clWhite
+    Caption                      No
+    Color                        0xD2D2D2
+    Font.Color                   clWindowText
+    Font.Effects                 []
+    Font.Name                    Tahoma
+    Font.Size                    10
+    Font.Style                   []
+    Height                       80
+    Left                         5
+    Matrix                       -1
+    Momentary                    Yes
+    Picture                      (None)
+    StatusWhenOff.BGcolor        RED
+    StatusWhenOff.Caption        ''
+    StatusWhenOff.Glow           Yes
+    StatusWhenOff.Color          WHITE
+    StatusWhenOff.Effects        []
+    StatusWhenOff.Name           Tahoma
+    StatusWhenOff.Size           8
+    StatusWhenOff.Style          []
+    StatusWhenOff.Visible        Yes
+    StatusWhenOn.BGcolor         RED
+    StatusWhenOn.Caption         ''
+    StatusWhenOn.Glow            Yes
+    StatusWhenOn.Color           WHITE
+    StatusWhenOn.Effects         []
+    StatusWhenOn.Name            Tahoma
+    StatusWhenOn.Size            8
+    StatusWhenOn.Style           []
+    StatusWhenOn.Visible         Yes
+    Top                          210
+    Width                        110
+    OnChanged                    ''
+    OnTouchMoving                ''
+    OnTouchPressed               ''
+    OnTouchReleased              ''
+end
+Strings
+    Name                         Strings9
+    Alias                        Strings9
+    Alignment                    Center
+    BGcolor                      WHITE
+    Height                       54
+    FGcolor                      0x14C814
+    Font.Bold                    No
+    Font.CharSet                 ANSI
+    Font.Italic                  No
+    Font.Name                    Tahoma
+    Font.Opaque                  Yes
+    Font.Size                    40
+    Font.Strikethrough           No
+    Font.Underline               No
+    Left                         0
+    Strings                      sacrum
+    StringsStyle                 Book
+    Top                          84
+    Width                        240
+    OnChanged                    ''
+end
+Strings
+    Name                         Strings10
+    Alias                        Strings10
+    Alignment                    Center
+    BGcolor                      WHITE
+    Height                       87
+    FGcolor                      BLACK
+    Font.Bold                    No
+    Font.CharSet                 ANSI
+    Font.Italic                  No
+    Font.Name                    Tahoma
+    Font.Opaque                  Yes
+    Font.Size                    40
+    Font.Strikethrough           No
+    Font.Underline               No
+    Left                         0
+    Strings                      'Is this correct?\n'
+    StringsStyle                 Book
+    Top                          172
+    Width                        240
+    OnChanged                    ''
+end
+Strings
+    Name                         Strings11
+    Alias                        Strings11
+    Alignment                    Center
+    BGcolor                      WHITE
+    Height                       91
+    FGcolor                      BLACK
+    Font.Bold                    No
+    Font.CharSet                 ANSI
+    Font.Italic                  No
+    Font.Name                    Tahoma
+    Font.Opaque                  Yes
+    Font.Size                    40
+    Font.Strikethrough           No
+    Font.Underline               No
+    Left                         0
+    Strings                      'Site selected \nis the\n'
+    StringsStyle                 Book
+    Top                          0
+    Width                        240
+    OnChanged                    ''
+end
+Strings
+    Name                         Strings8
+    Alias                        Strings8
+    Alignment                    Center
+    BGcolor                      WHITE
+    Height                       54
+    FGcolor                      0x14C814
+    Font.Bold                    No
+    Font.CharSet                 ANSI
+    Font.Italic                  No
+    Font.Name                    Tahoma
+    Font.Opaque                  Yes
+    Font.Size                    40
+    Font.Strikethrough           No
+    Font.Underline               No
+    Left                         0
+    Strings                      heel\n
+    StringsStyle                 Book
+    Top                          84
+    Width                        240
+    OnChanged                    ''
+end
+Strings
+    Name                         Strings12
+    Alias                        Strings12
+    Alignment                    Center
+    BGcolor                      WHITE
+    Height                       54
+    FGcolor                      0x14C814
+    Font.Bold                    No
+    Font.CharSet                 ANSI
+    Font.Italic                  No
+    Font.Name                    Tahoma
+    Font.Opaque                  Yes
+    Font.Size                    40
+    Font.Strikethrough           No
+    Font.Underline               No
+    Left                         0
+    Strings                      'shoulder blade'
+    StringsStyle                 Book
+    Top                          84
+    Width                        240
+    OnChanged                    ''
+end
+Strings
+    Name                         Strings13
+    Alias                        Strings13
+    Alignment                    Center
+    BGcolor                      WHITE
+    Height                       54
+    FGcolor                      0x14C814
+    Font.Bold                    No
+    Font.CharSet                 ANSI
+    Font.Italic                  No
+    Font.Name                    Tahoma
+    Font.Opaque                  Yes
+    Font.Size                    40
+    Font.Strikethrough           No
+    Font.Underline               No
+    Left                         0
+    Strings                      coccyx
+    StringsStyle                 Book
+    Top                          84
+    Width                        240
+    OnChanged                    ''
+end
+Strings
+    Name                         Strings14
+    Alias                        Strings14
+    Alignment                    Center
+    BGcolor                      WHITE
+    Height                       54
+    FGcolor                      0x14C814
+    Font.Bold                    No
+    Font.CharSet                 ANSI
+    Font.Italic                  No
+    Font.Name                    Tahoma
+    Font.Opaque                  Yes
+    Font.Size                    40
+    Font.Strikethrough           No
+    Font.Underline               No
+    Left                         0
+    Strings                      hips
+    StringsStyle                 Book
+    Top                          84
+    Width                        240
+    OnChanged                    ''
+end
+Strings
+    Name                         Strings15
+    Alias                        Strings15
+    Alignment                    Center
+    BGcolor                      WHITE
+    Height                       88
+    FGcolor                      0x14C814
+    Font.Bold                    No
+    Font.CharSet                 ANSI
+    Font.Italic                  No
+    Font.Name                    Tahoma
+    Font.Opaque                  Yes
+    Font.Size                    40
+    Font.Strikethrough           No
+    Font.Underline               No
+    Left                         0
+    Strings                      ischial\ntuberosity\n
+    StringsStyle                 Book
+    Top                          84
+    Width                        240
+    OnChanged                    ''
+end
+Form
+    Name                         Screens_PressureTimeout2Screen
+    Alias                        PressureTimeout2Screen
+    Bgtype                       Color
+    Color                        WHITE
+    Image                        (None)
+    Source.Height                0
+    Source.Left                  0
+    Source.Top                   0
+    Source.Width                 0
+    OnActivate                   ''
+    OnCreate                     ''
+    OnRepeat                     ''
+    OnTouchMoving                ''
+    OnTouchPressed               ''
+    OnTouchReleased              ''
+end
+Strings
+    Name                         Strings16
+    Alias                        Strings16
+    Alignment                    Center
+    BGcolor                      WHITE
+    Height                       193
+    FGcolor                      BLACK
+    Font.Bold                    No
+    Font.CharSet                 ANSI
+    Font.Italic                  No
+    Font.Name                    Tahoma
+    Font.Opaque                  Yes
+    Font.Size                    40
+    Font.Strikethrough           No
+    Font.Underline               No
+    Left                         5
+    Strings                      'Remove device from the skin and reapply to the site.\n'
+    StringsStyle                 Book
+    Top                          85
+    Width                        240
+    OnChanged                    ''
+end
