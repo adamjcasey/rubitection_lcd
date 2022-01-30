@@ -149,140 +149,174 @@ func Commands_UpdatePressureData()
     pressure_value := Utilities_ConvertHexStringToInt(&serial_buffer[1]);
 
     //pressure_value := (pressure_value * 60) / 1024;
-    if(pressure_value > 800)
+    if (pressure_value > 800)
         pressure_value := 800;
     endif
 
-    if(pressure_value < 0)
+    if (pressure_value < 0)
         pressure_value := 0;
     endif
 
     // Default to "in range" pressure state
     var current_pressure_state := 0;
 
-    if(pressure_value < 585)
-        // Below threshold
-        current_pressure_state := -1;
+    // Thresholds are different for high and low pressure
+    // HIGH
+    if (current_screen_id == SCREENS_PRESSURE_1)
+        if (pressure_value < 585)
+            // Below threshold
+            current_pressure_state := -1;
+        endif
+
+        if (pressure_value > 715)
+            // Above threshold
+            current_pressure_state := 1;
+        endif
+
+        // Set the value to the angular meters
+        img_SetWord(hndl, iAngularmeter1, IMAGE_INDEX, pressure_value) ;
+        img_Show(hndl, iAngularmeter1) ;
+
     endif
 
-    if(pressure_value > 715)
-        // Above threshold
-        current_pressure_state := 1;
-    endif
+    // LOW
+    if (current_screen_id == SCREENS_PRESSURE_2)
+        if (pressure_value < 35)
+            // Below threshold
+            current_pressure_state := -1;
+        endif
 
-    // Set the value to the angular meters
-    img_SetWord(hndl, iAngularmeter1, IMAGE_INDEX, pressure_value) ; // where frame is 0 to 60 (for a displayed 0 to 6)
-    img_Show(hndl,iAngularmeter1) ;
+        if (pressure_value > 165)
+            // Above threshold
+            current_pressure_state := 1;
+        endif
+
+        // Set the value to the angular meters
+        img_SetWord(hndl, iAngularmeter2, IMAGE_INDEX, pressure_value) ;
+        img_Show(hndl, iAngularmeter2) ;
+
+    endif
 
     // Check to see if we have an updated pressure state
-    if(previous_pressure_state != current_pressure_state)
+    if (previous_pressure_state != current_pressure_state)
         gfx_RectangleFilled(0,216,240,271,WHITE);
     endif
 
     previous_pressure_state := current_pressure_state;
 
     // Depending on state we can set the appropriate text items
-    if(current_pressure_state == -1)
-        // Below target pressure
 
-        // Strings24 1.1 generated 4/13/2016 4:42:59 AM
-        txt_FontID(hFont10) ; // Font index correct at time of code generation
-        txt_FGcolour(BLACK) ;
-        txt_BGcolour(WHITE) ;
-        gfx_MoveTo(0 , 216) ;
-        PrintDisk(hstrings, Strings24StartH, Strings24StartL, Strings24Size, 0) ; // where i is Page 0 - Strings24Count-1
+    // HIGH
+    if (current_screen_id == SCREENS_PRESSURE_1)
+
+        if (current_pressure_state == -1)
+            // Below target pressure
+            txt_FontID(hFont10) ;
+            txt_FGcolour(BLACK) ;
+            txt_BGcolour(WHITE) ;
+            gfx_MoveTo(0 , 216) ;
+            PrintDisk(hstrings, Strings24StartH, Strings24StartL, Strings24Size, 0) ;
+        endif
+
+        if (current_pressure_state == 1)
+            // Above target pressure
+            txt_FontID(hFont7) ;
+            txt_FGcolour(BLACK) ;
+            txt_BGcolour(WHITE) ;
+            gfx_MoveTo(0 , 216) ;
+            PrintDisk(hstrings, Strings21StartH, Strings21StartL, Strings21Size, 0) ;
+        endif
+
+        if (current_pressure_state == 0)
+            txt_FontID(hFont8) ;
+            txt_FGcolour(BLACK) ;
+            txt_BGcolour(WHITE) ;
+            gfx_MoveTo(0 , 216) ;
+            PrintDisk(hstrings, Strings22StartH, Strings22StartL, Strings22Size, 0) ;
+        endif
     endif
 
-    if(current_pressure_state == 1)
-        // Above target pressure
+    // LOW
+    if (current_screen_id == SCREENS_PRESSURE_2)
 
-        // Strings21 1.1 generated 4/13/2016 4:45:03 AM
-        txt_FontID(hFont7) ; // Font index correct at time of code generation
-        txt_FGcolour(BLACK) ;
-        txt_BGcolour(WHITE) ;
-        gfx_MoveTo(0 , 216) ;
-        PrintDisk(hstrings, Strings21StartH, Strings21StartL, Strings21Size, 0) ; // where i is Page 0 - Strings21Count-1
+        if (current_pressure_state == -1)
+            // Below target pressure
+            txt_FontID(hFont10) ;
+            txt_FGcolour(BLACK) ;
+            txt_BGcolour(WHITE) ;
+            gfx_MoveTo(0 , 216) ;
+            PrintDisk(hstrings, Strings25StartH, Strings25StartL, Strings25Size, 0) ;
+        endif
 
-    endif
-    // Print the remaining time too
+        if (current_pressure_state == 1)
+            // Above target pressure
+            txt_FontID(hFont7) ;
+            txt_FGcolour(BLACK) ;
+            txt_BGcolour(WHITE) ;
+            gfx_MoveTo(0 , 216) ;
+            PrintDisk(hstrings, Strings30StartH, Strings30StartL, Strings30Size, 0) ;
+        endif
 
-    if(current_pressure_state == 0)
-        // Strings22 1.1 generated 4/13/2016 4:44:17 AM
-        txt_FontID(hFont8) ; // Font index correct at time of code generation
-        txt_FGcolour(BLACK) ;
-        txt_BGcolour(WHITE) ;
-        gfx_MoveTo(0 , 216) ;
-        PrintDisk(hstrings, Strings22StartH, Strings22StartL, Strings22Size, 0) ; // where i is Page 0 - Strings22Count-1
-
-
-        var time_remaining := 0;
-        time_remaining := Utilities_ConvertHexStringToInt(&serial_buffer[5]);
-
-        txt_Set(TEXT_COLOUR, BLACK);
-        txt_Set(TEXT_HIGHLIGHT, WHITE);
-        txt_Set(FONT_ID, FONT1);
-        txt_MoveCursor(31,0);
-
-        if(time_remaining > 0)
-            var seconds_remaining;
-            var milliseconds_remaining;
-            seconds_remaining := time_remaining/1000;
-            milliseconds_remaining := time_remaining - (seconds_remaining*1000);
-
-            print("          ");
-            print("Hold for ");
-            print(seconds_remaining);
-            print(".");
-            print([UDEC3Z]milliseconds_remaining);
-            print("             ");
-        else
-            print("  Adjust pressure to green range  ");
+        if (current_pressure_state == 0)
+            txt_FontID(hFont8) ;
+            txt_FGcolour(BLACK) ;
+            txt_BGcolour(WHITE) ;
+            gfx_MoveTo(0 , 216) ;
+            PrintDisk(hstrings, Strings31StartH, Strings31StartL, Strings31Size, 0) ;
         endif
     endif
 
     // Now display if we're balanced or not
-    if(pressure_value > 0)
+    if (pressure_value > 0)
         // We are pressing on the skin
         var pressure_balanced := 0;
-        if(serial_buffer[9] == '1')
+        if (serial_buffer[9] == '1')
             pressure_balanced := 1;
         endif
 
-        if(pressure_balanced != previous_balance)
+        if (pressure_balanced != previous_balance)
             // Clear the balance area so we can display the proper text
             gfx_RectangleFilled(0,286,240,320,WHITE);
         endif
         previous_balance := pressure_balanced;
 
-        if(serial_buffer[9] == '1')
-            // Pressure is balanced among sensors
-            //print("             BALANCED              ");
-
-            // Strings18 1.1 generated 4/13/2016 1:13:52 AM
-            txt_FontID(hFont4) ; // Font index correct at time of code generation
-            txt_FGcolour(BLACK) ;
-            txt_BGcolour(WHITE) ;
-            gfx_MoveTo(0 , 286) ;
-            PrintDisk(hstrings, Strings18StartH, Strings18StartL, Strings18Size, 0) ; // where i is Page 0 - Strings18Count-1
-
-        else
-            // Pressure is not balanced
-            //txt_MoveCursor(35,0);
-            //print("Press device perpendicular to skin ");
-
-            // Strings19 1.1 generated 4/13/2016 1:14:09 AM
-            txt_FontID(hFont5) ; // Font index correct at time of code generation
-            txt_FGcolour(RED) ;
-            txt_BGcolour(WHITE) ;
-            gfx_MoveTo(0 , 286) ;
-            PrintDisk(hstrings, Strings19StartH, Strings19StartL, Strings19Size, 0) ; // where i is Page 0 - Strings19Count-1
-
-
+        // HIGH
+        if (current_screen_id == SCREENS_PRESSURE_1)
+            if (serial_buffer[9] == '1')
+                // Pressure is balanced among sensors
+                txt_FontID(hFont4) ;
+                txt_FGcolour(BLACK) ;
+                txt_BGcolour(WHITE) ;
+                gfx_MoveTo(0 , 286) ;
+                PrintDisk(hstrings, Strings18StartH, Strings18StartL, Strings18Size, 0) ;
+            else
+                // Pressure is not balanced
+                txt_FontID(hFont5) ; // Font index correct at time of code generation
+                txt_FGcolour(RED) ;
+                txt_BGcolour(WHITE) ;
+                gfx_MoveTo(0 , 286) ;
+                PrintDisk(hstrings, Strings19StartH, Strings19StartL, Strings19Size, 0) ;
+            endif
         endif
-    else
-        // No or very low pressure. Do not print balance information (how can it be balanced if there's no pressure?)
-        // Clear out any information that's already there
-        //print("                                   ");
+
+        // LOW
+        if (current_screen_id == SCREENS_PRESSURE_2)
+            if (serial_buffer[9] == '1')
+                // Pressure is balanced among sensors
+                txt_FontID(hFont4) ;
+                txt_FGcolour(BLACK) ;
+                txt_BGcolour(WHITE) ;
+                gfx_MoveTo(0 , 286) ;
+                PrintDisk(hstrings, Strings28StartH, Strings28StartL, Strings28Size, 0) ;
+            else
+                // Pressure is not balanced
+                txt_FontID(hFont5) ; // Font index correct at time of code generation
+                txt_FGcolour(RED) ;
+                txt_BGcolour(WHITE) ;
+                gfx_MoveTo(0 , 286) ;
+                PrintDisk(hstrings, Strings26StartH, Strings26StartL, Strings26Size, 0) ;
+            endif
+        endif
     endif
 endfunc
 
@@ -461,7 +495,7 @@ func Screens_SwitchScreen(var screen_index)
                 Screens_PressureScreen(1);
                 break;
             case SCREENS_PRESSURE_2:
-                Screens_PressureScreen(2);
+                Screens_PressureScreen2();
                 break;
             case SCREENS_SELECT_SITE:
                 Screens_SelectSiteScreen();
@@ -574,13 +608,30 @@ endfunc
 
 func Screens_PressureScreen2()
 
-    // Screens_PressureScreen2 1.1 generated 1/4/2016 3:30:47 PM
+    // Screens_PressureScreen2 1.1 generated 1/29/2022 9:58:31 PM
     gfx_BGcolour(WHITE) ;
     gfx_Cls() ;
 
-    // Angularmeter2 1.0 generated 1/4/2016 3:30:47 PM
-    img_SetWord(hndl, iAngularmeter2, IMAGE_INDEX, 0) ; // where frame is 0 to 60 (for a displayed 0 to 6)
+    // Angularmeter2 1.0 generated 1/29/2022 9:58:31 PM
+    img_SetWord(hndl, iAngularmeter2, IMAGE_INDEX, 0) ; // where frame is 0 to 800 (for a displayed 0 to 80)
     img_Show(hndl,iAngularmeter2) ;
+
+
+    txt_FontID(hFont6) ; // Font index correct at time of code generation
+    txt_FGcolour(BLACK) ;
+    txt_BGcolour(WHITE) ;
+    gfx_MoveTo(0 , 216) ;
+    PrintDisk(hstrings, Strings29StartH, Strings29StartL, Strings29Size, 0) ; // where i is Page 0 - Strings29Count-1
+
+    // Set our pressure state so that we make sure we overwrite as soon as we get pressure data
+    previous_pressure_state := 2;
+
+    txt_FontID(hFont3) ; // Font index correct at time of code generation
+    txt_FGcolour(BLACK) ;
+    txt_BGcolour(WHITE) ;
+    gfx_MoveTo(0 , 0) ;
+    PrintDisk(hstrings, Strings27StartH, Strings27StartL, Strings27Size, 0) ; // where i is Page 0 - Strings27Count-1
+
 
 endfunc
 
