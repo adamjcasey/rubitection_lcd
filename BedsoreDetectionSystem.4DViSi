@@ -10,10 +10,15 @@ Options
     ResponseSize                 2
     Multidrop                    No
     Destination                  1
+    DestBank                     0
     MainForm                     0
     SndBuf                       0
     ButtonDisable                No
     SignedDigits                 No
+    MaxString                    75
+    ComPort                      0
+    ComTX1pinIdx                 0
+    ComRX1pinIdx                 0
 end
 Form
     Name                         Screens_SplashScreen
@@ -715,9 +720,9 @@ AngularMeter
     Alias                        Angularmeter2
     Angle                        30
     AngleOffset                  300
-    Caption                      'Pressure Value (N)'
+    Caption                      mmHg
     CaptionXOffset               0
-    CaptionYOffset               90
+    CaptionYOffset               -35
     CenterDotColor               WHITE
     CenterDotWidth               2
     Color                        WHITE
@@ -730,30 +735,206 @@ AngularMeter
     Font.Name                    Tahoma
     Font.Size                    10
     Font.Style                   []
-    Height                       240
-    Labels                       5
+    Height                       184
+    Labels                       8
     LabelsFont.Color             BLACK
     LabelsFont.Effects           []
     LabelsFont.Name              Tahoma
     LabelsFont.Size              8
     LabelsFont.Style             []
-    LabelsOffset                 30
-    Left                         0
-    Maxvalue                     5
+    LabelsOffset                 34
+    Left                         20
+    Maxvalue                     80
     Minvalue                     0
     NeedleBasewidth              8
     NeedleColor                  0x640915
-    NeedleLength                 60
-    Percent1                     76
+    NeedleLength                 50
+    Percent1                     5
     Percent2                     17
-    Radius                       120
+    Radius                       100
     Spacing                      50
-    Ticks                        25
+    Ticks                        32
     TicksColor                   clWhite
-    TicksEnlarge                 5
+    TicksEnlarge                 4
     TicksMax                     18
     TicksMin                     5
+    Top                          24
+    Width                        200
+    OnChanged                    ''
+end
+Strings
+    Name                         Strings25
+    Alias                        Strings25
+    Alignment                    Center
+    BGcolor                      WHITE
+    Height                       55
+    FGcolor                      BLACK
+    Font.Bold                    Yes
+    Font.CharSet                 ANSI
+    Font.Italic                  No
+    Font.Name                    Tahoma
+    Font.Opaque                  Yes
+    Font.Size                    24
+    Font.Strikethrough           No
+    Font.Underline               No
+    Left                         0
+    Strings                      'Push to 10 mmHg\n'
+    StringsStyle                 Book
+    Top                          216
+    Width                        240
+    OnChanged                    ''
+end
+Strings
+    Name                         Strings26
+    Alias                        Strings26
+    Alignment                    Center
+    BGcolor                      WHITE
+    Height                       34
+    FGcolor                      RED
+    Font.Bold                    Yes
+    Font.CharSet                 ANSI
+    Font.Italic                  No
+    Font.Name                    Tahoma
+    Font.Opaque                  Yes
+    Font.Size                    24
+    Font.Strikethrough           No
+    Font.Underline               No
+    Left                         0
+    Strings                      'NOT BALANCED\n'
+    StringsStyle                 Book
+    Top                          286
+    Width                        240
+    OnChanged                    ''
+end
+Strings
+    Name                         Strings27
+    Alias                        Strings27
+    Alignment                    Center
+    BGcolor                      WHITE
+    Height                       34
+    FGcolor                      BLACK
+    Font.Bold                    Yes
+    Font.CharSet                 ANSI
+    Font.Italic                  No
+    Font.Name                    Tahoma
+    Font.Opaque                  Yes
+    Font.Size                    24
+    Font.Strikethrough           No
+    Font.Underline               No
+    Left                         0
+    Strings                      'Pressure On Skin'
+    StringsStyle                 Book
     Top                          0
+    Width                        240
+    OnChanged                    ''
+end
+Strings
+    Name                         Strings28
+    Alias                        Strings28
+    Alignment                    Center
+    BGcolor                      WHITE
+    Height                       34
+    FGcolor                      BLACK
+    Font.Bold                    Yes
+    Font.CharSet                 ANSI
+    Font.Italic                  No
+    Font.Name                    Tahoma
+    Font.Opaque                  Yes
+    Font.Size                    24
+    Font.Strikethrough           No
+    Font.Underline               No
+    Left                         0
+    Strings                      BALANCED\n
+    StringsStyle                 Book
+    Top                          286
+    Width                        240
+    OnChanged                    ''
+end
+Strings
+    Name                         Strings29
+    Alias                        Strings29
+    Alignment                    Center
+    BGcolor                      WHITE
+    Height                       55
+    FGcolor                      BLACK
+    Font.Bold                    Yes
+    Font.CharSet                 ANSI
+    Font.Italic                  No
+    Font.Name                    Tahoma
+    Font.Opaque                  Yes
+    Font.Size                    24
+    Font.Strikethrough           No
+    Font.Underline               No
+    Left                         0
+    Strings                      'Put device on\nbedsore site\n'
+    StringsStyle                 Book
+    Top                          216
+    Width                        240
+    OnChanged                    ''
+end
+Strings
+    Name                         Strings30
+    Alias                        Strings30
+    Alignment                    Center
+    BGcolor                      WHITE
+    Height                       54
+    FGcolor                      BLACK
+    Font.Bold                    Yes
+    Font.CharSet                 ANSI
+    Font.Italic                  No
+    Font.Name                    Tahoma
+    Font.Opaque                  Yes
+    Font.Size                    24
+    Font.Strikethrough           No
+    Font.Underline               No
+    Left                         0
+    Strings                      '10 mmHg exceeded. \nGo to green region\n'
+    StringsStyle                 Book
+    Top                          216
+    Width                        240
+    OnChanged                    ''
+end
+Strings
+    Name                         Strings31
+    Alias                        Strings31
+    Alignment                    Center
+    BGcolor                      WHITE
+    Height                       55
+    FGcolor                      BLACK
+    Font.Bold                    Yes
+    Font.CharSet                 ANSI
+    Font.Italic                  No
+    Font.Name                    Tahoma
+    Font.Opaque                  Yes
+    Font.Size                    24
+    Font.Strikethrough           No
+    Font.Underline               No
+    Left                         0
+    Strings                      'Hold at 10 mmHg\n'
+    StringsStyle                 Book
+    Top                          216
+    Width                        240
+    OnChanged                    ''
+end
+Strings
+    Name                         Strings32
+    Alias                        Strings32
+    Alignment                    Center
+    BGcolor                      WHITE
+    Height                       55
+    FGcolor                      BLACK
+    Font.Bold                    Yes
+    Font.CharSet                 ANSI
+    Font.Italic                  No
+    Font.Name                    Tahoma
+    Font.Opaque                  Yes
+    Font.Size                    24
+    Font.Strikethrough           No
+    Font.Underline               No
+    Left                         0
+    Strings                      'Select nearby\nhealthy site\n'
+    StringsStyle                 Book
+    Top                          216
     Width                        240
     OnChanged                    ''
 end
