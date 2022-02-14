@@ -186,12 +186,12 @@ func Commands_UpdatePressureData()
 
     // Thresholds are different for high and low pressure
     if (low_pressure)
-        if (pressure_value < 35)
+        if (pressure_value < 120)
             // Below threshold
             current_pressure_state := -1;
         endif
 
-        if (pressure_value > 165)
+        if (pressure_value > 185)
             // Above threshold
             current_pressure_state := 1;
         endif

@@ -731,7 +731,7 @@ Strings
     Font.Strikethrough           No
     Font.Underline               No
     Left                         0
-    Strings                      'Push to 10 mmHg\n'
+    Strings                      'Push to 15 mmHg\n'
     StringsStyle                 Book
     Top                          216
     Width                        240
@@ -753,7 +753,7 @@ Strings
     Font.Strikethrough           No
     Font.Underline               No
     Left                         0
-    Strings                      'Hold at 10 mmHg\n'
+    Strings                      'Hold at 15 mmHg\n'
     StringsStyle                 Book
     Top                          216
     Width                        240
@@ -775,7 +775,7 @@ Strings
     Font.Strikethrough           No
     Font.Underline               No
     Left                         0
-    Strings                      '10 mmHg exceeded. \nGo to green region\n'
+    Strings                      '15 mmHg exceeded. \nGo to green region\n'
     StringsStyle                 Book
     Top                          216
     Width                        240
@@ -815,8 +815,8 @@ AngularMeter
     NeedleBasewidth              8
     NeedleColor                  0x640915
     NeedleLength                 50
-    Percent1                     6
-    Percent2                     17
+    Percent1                     15
+    Percent2                     10
     Radius                       100
     Spacing                      50
     Ticks                        32
