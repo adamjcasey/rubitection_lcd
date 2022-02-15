@@ -1,4 +1,4 @@
-#platform "uLCD-24PTU"
+        #platform "uLCD-24PTU"
 
 // Program Skeleton 1.2 generated 12/11/2015 3:17:31 PM
 
@@ -758,7 +758,7 @@ func Screens_HealthySiteScreen()
     txt_FontID(hFont1) ; // Font index correct at time of code generation
     txt_FGcolour(BLACK) ;
     txt_BGcolour(WHITE) ;
-    gfx_MoveTo(5 , 16) ;
+    gfx_MoveTo(0 , 10) ;
     PrintDisk(hstrings, Strings3StartH, Strings3StartL, Strings3Size, 0) ; // where i is Page 0 - Strings3Count-1
 
 endfunc

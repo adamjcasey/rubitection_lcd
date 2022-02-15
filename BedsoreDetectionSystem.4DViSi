@@ -850,7 +850,7 @@ Strings
     Alias                        Strings3
     Alignment                    Center
     BGcolor                      WHITE
-    Height                       200
+    Height                       300
     FGcolor                      BLACK
     Font.Bold                    No
     Font.CharSet                 ANSI
@@ -861,9 +861,9 @@ Strings
     Font.Strikethrough           No
     Font.Underline               No
     Left                         0
-    Strings                      'Measurement on bedsore \nsite complete'
+    Strings                      'System is ready to take a measurement. Please place the device on a site with healthy skin.'
     StringsStyle                 Book
-    Top                          105
+    Top                          10
     Width                        240
     OnChanged                    ''
 end
@@ -1000,7 +1000,7 @@ Strings
     Font.Strikethrough           No
     Font.Underline               No
     Left                         0
-    Strings                      '\nTimed out.\n\n10 mmHg of pressure not reached.\n'
+    Strings                      '\nTimed out.\n\n15 mmHg of pressure not reached.\n'
     StringsStyle                 Book
     Top                          12
     Width                        240
